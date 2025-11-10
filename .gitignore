@@ -1,0 +1,51 @@
+################################
+# DEPENDENCIAS Y DIRECTORIOS GENERADOS
+################################
+
+# Node.js
+# El directorio más importante a excluir, ya que contiene todas las librerías.
+# Es grande y se puede regenerar usando 'npm install' o 'yarn install'.
+node_modules
+# Archivos de caché
+.npm
+.yarn-cache
+
+# Directorios de compilación/salida (build)
+# Excluye cualquier carpeta donde se guarde la versión final (minificada) del código.
+dist
+build
+out
+.next # Para proyectos Next.js
+.nuxt # Para proyectos Nuxt.js
+public/dist # Si tu build se guarda dentro de 'public'
+
+################################
+# ARCHIVOS DEL SISTEMA OPERATIVO Y CACHÉS
+################################
+
+# Mac
+.DS_Store
+# Windows
+Thumbs.db
+
+################################
+# ARCHIVOS DE CONFIGURACIÓN Y ENTORNO
+################################
+
+# Archivos de entorno (contienen claves secretas, contraseñas, etc.)
+.env
+.env.local
+.env.*.local
+
+# Archivos de log
+*.log
+npm-debug.log*
+
+################################
+# IDEs (Entornos de Desarrollo)
+################################
+
+# VSCode
+.vscode/
+# JetBrains (WebStorm, PHPStorm, etc.)
+.idea/
