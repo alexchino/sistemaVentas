@@ -17,9 +17,14 @@ export default function Login() {
         password,
       });
 
-      if (res.data.token) {
-        localStorage.setItem("token", res.data.token);
-        window.location.href = "/dashboard";
+      // ✅ Si el backend devuelve el usuario correctamente
+      if (res.data.usuario) {
+        localStorage.setItem("usuarioId", res.data.usuario.id);
+        localStorage.setItem("rol", res.data.usuario.rol);
+        localStorage.setItem("nombre", res.data.usuario.nombre);
+
+        // Redirigir al dashboard
+        window.location.href = "/Dashboard";
       } else {
         setError("Credenciales incorrectas");
       }
@@ -33,7 +38,9 @@ export default function Login() {
     <div className="container d-flex align-items-center justify-content-center vh-100 bg-light">
       <div className="card shadow p-4" style={{ maxWidth: "400px", width: "100%" }}>
         <h3 className="text-center mb-4">Iniciar Sesión</h3>
-        {error && <div className="alert alert-danger">{error}</div>}
+
+        {error && <div className="alert alert-danger text-center">{error}</div>}
+
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label className="form-label">Correo</label>
@@ -45,6 +52,7 @@ export default function Login() {
               required
             />
           </div>
+
           <div className="mb-3">
             <label className="form-label">Contraseña</label>
             <input
@@ -55,9 +63,12 @@ export default function Login() {
               required
             />
           </div>
+
           <button type="submit" className="btn btn-primary w-100">
             Entrar
           </button>
+          <p>admin@correo.com <br /> admin123
+          </p>
         </form>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import express from "express";
+import { Router } from "express";
 import {
   obtenerCategorias,
   crearCategoria,
@@ -6,7 +6,7 @@ import {
   eliminarCategoria,
 } from "../controllers/categoriaController.js";
 
-const router = express.Router();
+const router = Router();
 
 router.get("/", obtenerCategorias);
 router.post("/", crearCategoria);

@@ -43,20 +43,33 @@ export const crearProducto = async (req, res) => {
 };
 
 // ✅ Actualizar producto
+// ✅ Actualizar producto (corrigido)
 export const actualizarProducto = async (req, res) => {
   try {
     const { ProductoID } = req.params;
-    const { Nombre, Descripcion, Precio, Stock, categoria_id } = req.body;
+    const {
+      Nombre,
+      nombre,
+      Descripcion,
+      descripcion,
+      Precio,
+      precio,
+      Stock,
+      stock,
+      categoria_id,
+      Categoria_id,
+    } = req.body;
+
     const pool = await getConnection();
 
     await pool
       .request()
       .input("ProductoID", sql.Int, ProductoID)
-      .input("Nombre", sql.NVarChar, Nombre)
-      .input("Descripcion", sql.NVarChar, Descripcion || "")
-      .input("Precio", sql.Decimal(10, 2), Precio)
-      .input("Stock", sql.Int, Stock)
-      .input("categoria_id", sql.Int, categoria_id || null)
+      .input("Nombre", sql.NVarChar, Nombre || nombre)
+      .input("Descripcion", sql.NVarChar, Descripcion || descripcion || "")
+      .input("Precio", sql.Decimal(10, 2), Precio || precio)
+      .input("Stock", sql.Int, Stock || stock)
+      .input("categoria_id", sql.Int, categoria_id || Categoria_id || null)
       .query(`
         UPDATE Productos 
         SET Nombre=@Nombre, Descripcion=@Descripcion, Precio=@Precio, Stock=@Stock, categoria_id=@categoria_id
@@ -69,6 +82,8 @@ export const actualizarProducto = async (req, res) => {
     res.status(500).json({ message: "Error al actualizar producto" });
   }
 };
+
+
 
 // ✅ Eliminar producto
 export const eliminarProducto = async (req, res) => {

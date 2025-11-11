@@ -14,6 +14,11 @@ export default function Productos() {
   });
   const [showModal, setShowModal] = useState(false);
   const [modoEdicion, setModoEdicion] = useState(false);
+  const [busqueda, setBusqueda] = useState("");
+
+  // 🔹 Paginación
+  const [paginaActual, setPaginaActual] = useState(1);
+  const productosPorPagina = 5;
 
   useEffect(() => {
     obtenerProductos();
@@ -90,10 +95,37 @@ export default function Productos() {
     }
   };
 
+  // 🔍 Filtrado de productos
+  const productosFiltrados = productos.filter(
+    (p) =>
+      p.Nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+      p.Descripcion.toLowerCase().includes(busqueda.toLowerCase())
+  );
+
+  // 📄 Paginación
+  const totalPaginas = Math.ceil(productosFiltrados.length / productosPorPagina);
+  const indiceInicio = (paginaActual - 1) * productosPorPagina;
+  const indiceFin = indiceInicio + productosPorPagina;
+  const productosPaginados = productosFiltrados.slice(indiceInicio, indiceFin);
+
+  const cambiarPagina = (numero) => {
+    setPaginaActual(numero);
+  };
+
   return (
     <div className="container mt-5">
+      {/* 🔍 Buscador y botón agregar */}
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="fw-bold">Lista de Productos</h2>
+        <input
+          type="text"
+          placeholder="Buscar producto por nombre o descripción..."
+          className="form-control w-50"
+          value={busqueda}
+          onChange={(e) => {
+            setBusqueda(e.target.value);
+            setPaginaActual(1);
+          }}
+        />
         <button className="btn btn-success btn-lg" onClick={abrirModalAgregar}>
           ➕ Agregar Producto
         </button>
@@ -114,7 +146,7 @@ export default function Productos() {
             </tr>
           </thead>
           <tbody>
-            {productos.map((p) => (
+            {productosPaginados.map((p) => (
               <tr key={p.ProductoID}>
                 <td>{p.ProductoID}</td>
                 <td>{p.Nombre}</td>
@@ -138,16 +170,61 @@ export default function Productos() {
                 </td>
               </tr>
             ))}
-            {productos.length === 0 && (
+            {productosPaginados.length === 0 && (
               <tr>
                 <td colSpan="7" className="text-muted">
-                  No hay productos registrados.
+                  No hay productos encontrados.
                 </td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
+
+      {/* PAGINADOR */}
+      {totalPaginas > 1 && (
+        <nav className="d-flex justify-content-center mt-4">
+          <ul className="pagination">
+            <li className={`page-item ${paginaActual === 1 ? "disabled" : ""}`}>
+              <button
+                className="page-link"
+                onClick={() => cambiarPagina(paginaActual - 1)}
+              >
+                Anterior
+              </button>
+            </li>
+
+            {Array.from({ length: totalPaginas }, (_, i) => (
+              <li
+                key={i}
+                className={`page-item ${
+                  paginaActual === i + 1 ? "active" : ""
+                }`}
+              >
+                <button
+                  className="page-link"
+                  onClick={() => cambiarPagina(i + 1)}
+                >
+                  {i + 1}
+                </button>
+              </li>
+            ))}
+
+            <li
+              className={`page-item ${
+                paginaActual === totalPaginas ? "disabled" : ""
+              }`}
+            >
+              <button
+                className="page-link"
+                onClick={() => cambiarPagina(paginaActual + 1)}
+              >
+                Siguiente
+              </button>
+            </li>
+          </ul>
+        </nav>
+      )}
 
       {/* MODAL */}
       {showModal && (
